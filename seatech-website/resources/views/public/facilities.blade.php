@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
 @section('title', 'Our Facilities - SEATECH Maritime Training')
+@section('meta_description', 'Explore our modern maritime training facilities and equipment at SEATECH Legazpi.')
+@section('og_title', 'Our Facilities - SEATECH')
+@section('og_description', 'Explore our modern maritime training facilities and equipment at SEATECH Legazpi.')
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-20">

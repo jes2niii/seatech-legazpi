@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Categories</h2>
-    @can('manage courses')
-    @if(Route::has($p.'.categories.create'))
-    <a href="{{ route($p.'.categories.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Category</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search categories...'])
+        @can('manage courses')
+        @if(Route::has($p.'.categories.create'))
+        <a href="{{ route($p.'.categories.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Category</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -32,8 +35,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($categories as $category)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $category->name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><i class="{{ $category->icon }}"></i> {{ $category->icon }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $category->name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs"><i class="{{ $category->icon }}"></i> {{ $category->icon }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $category->courses_count ?? $category->courses->count() }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($category->is_active)

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EnrollmentSubmitted;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\TrainingSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class EnrollmentController extends Controller
 {
@@ -141,6 +143,10 @@ class EnrollmentController extends Controller
                     ->toMediaCollection('documents');
                 \Storage::disk('local')->delete($path);
             }
+        }
+
+        if ($student->email) {
+            Mail::to($student->email)->send(new EnrollmentSubmitted($enrollment));
         }
 
         session()->forget('enrollment');

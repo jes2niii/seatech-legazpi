@@ -7,6 +7,7 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\CertificateVerificationController;
 use App\Http\Controllers\Public\EnrollmentController;
 use App\Http\Controllers\Public\FacilityController;
+use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Student\StudentPortalController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController as AdminCourseController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\FacilityController as AdminFacilityController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\CertificateController as AdminCertificateController;
+use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\Admin\CoreValueController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +43,10 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/verify-certificate', [CertificateVerificationController::class, 'show'])->name('verify.certificate');
 Route::post('/verify-certificate', [CertificateVerificationController::class, 'verify'])->name('verify.certificate.lookup');
 Route::get('/verify-certificate/{number}', [CertificateVerificationController::class, 'scan'])->name('verify.certificate.scan');
+
+// SEO
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Online enrollment
 Route::get('/enroll', [EnrollmentController::class, 'step1'])->name('enroll.step1');
@@ -86,13 +94,20 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])->prefix('admin')->na
     Route::resource('/enrollments', AdminEnrollmentController::class)->except(['create', 'store', 'edit', 'update']);
     Route::post('/enrollments/{enrollment}/approve', [AdminEnrollmentController::class, 'approve'])->name('enrollments.approve');
     Route::post('/enrollments/{enrollment}/reject', [AdminEnrollmentController::class, 'reject'])->name('enrollments.reject');
+    Route::get('/enrollments-export', [AdminEnrollmentController::class, 'export'])->name('enrollments.export');
     Route::resource('/students', StudentController::class);
+    Route::get('/students-export', [StudentController::class, 'export'])->name('students.export');
     Route::resource('/news', AdminNewsController::class)->except(['show']);
     Route::resource('/testimonials', TestimonialController::class)->except(['show']);
     Route::resource('/facilities', AdminFacilityController::class)->except(['show']);
     Route::resource('/inquiries', InquiryController::class)->only(['index', 'show', 'destroy']);
     Route::resource('/certificates', AdminCertificateController::class);
+    Route::get('/certificates-export', [AdminCertificateController::class, 'export'])->name('certificates.export');
+    Route::resource('/team', TeamMemberController::class);
+    Route::resource('/core-values', CoreValueController::class);
     Route::resource('/users', UserController::class);
+    Route::get('/settings', [SiteSettingController::class, 'edit'])->name('settings.edit');
+    Route::patch('/settings', [SiteSettingController::class, 'update'])->name('settings.update');
 });
 
 // Registrar routes
@@ -101,8 +116,11 @@ Route::middleware(['auth', 'verified', 'role:Registrar'])->prefix('registrar')->
     Route::resource('/enrollments', AdminEnrollmentController::class)->only(['index', 'show', 'destroy']);
     Route::post('/enrollments/{enrollment}/approve', [AdminEnrollmentController::class, 'approve'])->name('enrollments.approve');
     Route::post('/enrollments/{enrollment}/reject', [AdminEnrollmentController::class, 'reject'])->name('enrollments.reject');
+    Route::get('/enrollments-export', [AdminEnrollmentController::class, 'export'])->name('enrollments.export');
     Route::resource('/students', StudentController::class)->only(['index', 'show']);
+    Route::get('/students-export', [StudentController::class, 'export'])->name('students.export');
     Route::resource('/certificates', AdminCertificateController::class);
+    Route::get('/certificates-export', [AdminCertificateController::class, 'export'])->name('certificates.export');
 });
 
 // Training Coordinator routes

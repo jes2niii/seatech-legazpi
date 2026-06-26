@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Courses</h2>
-    @can('manage courses')
-    @if(Route::has($p.'.courses.create'))
-    <a href="{{ route($p.'.courses.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Course</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by title, code, or description...'])
+        @can('manage courses')
+        @if(Route::has($p.'.courses.create'))
+        <a href="{{ route($p.'.courses.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Course</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -34,9 +37,9 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($courses as $course)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $course->code }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $course->title }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $course->category->name ?? '-' }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $course->code }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $course->title }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $course->category->name ?? '-' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $course->duration }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₱{{ number_format($course->fee, 2) }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">

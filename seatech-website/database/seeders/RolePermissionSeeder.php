@@ -14,6 +14,7 @@ class RolePermissionSeeder extends Seeder
             'manage courses', 'manage schedules', 'manage enrollments',
             'manage users', 'manage news', 'manage gallery',
             'manage inquiries', 'manage certificates', 'view reports',
+            'manage settings',
         ];
 
         foreach ($permissions as $perm) {

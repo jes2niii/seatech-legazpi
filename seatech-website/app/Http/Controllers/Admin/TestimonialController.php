@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class TestimonialController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage gallery');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $testimonials = Testimonial::latest()->paginate(10);
+        $query = Testimonial::query();
+        $query = $this->applySearch($query, $request, ['student_name', 'course_taken', 'content']);
+        $testimonials = $query->latest()->paginate(10)->withQueryString();
         return view('admin.testimonials.index', compact('testimonials'));
     }
 

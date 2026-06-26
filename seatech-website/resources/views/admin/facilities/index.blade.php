@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Facilities</h2>
-    @can('manage gallery')
-    @if(Route::has($p.'.facilities.create'))
-    <a href="{{ route($p.'.facilities.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Facility</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search facilities...'])
+        @can('manage gallery')
+        @if(Route::has($p.'.facilities.create'))
+        <a href="{{ route($p.'.facilities.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Facility</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -31,7 +34,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($facilities as $facility)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $facility->name }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $facility->name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($facility->is_active)
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>

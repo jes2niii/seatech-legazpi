@@ -1,6 +1,42 @@
 @extends('layouts.public')
 
 @section('title', $course->title . ' - SEATECH Maritime Training')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($course->description ?? $course->title), 160))
+@section('og_title', $course->title . ' - SEATECH Training')
+@section('og_description', \Illuminate\Support\Str::limit(strip_tags($course->description ?? $course->title), 200))
+@section('og_type', 'product')
+
+@push('jsonld')
+@php
+$jsonLd = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Course',
+    'name' => $course->title,
+    'description' => strip_tags($course->description ?? ''),
+    'provider' => [
+        '@type' => 'Organization',
+        'name' => 'SEATECH Maritime Training & Assessment Center',
+        'url' => route('home'),
+    ],
+    'offers' => [
+        '@type' => 'Offer',
+        'category' => 'Maritime Training',
+        'price' => $course->fee,
+        'priceCurrency' => 'PHP',
+    ],
+    'hasCourseInstance' => $course->trainingSchedules->whereIn('status', ['upcoming', 'ongoing'])->map(fn($s) => [
+        '@type' => 'CourseInstance',
+        'name' => $course->title,
+        'startDate' => $s->start_date->toDateString(),
+        'endDate' => $s->end_date->toDateString(),
+        'location' => $s->venue,
+    ])->all() ?: null,
+];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-16">
@@ -106,10 +142,12 @@
                             <dt class="text-blue-200 text-xs uppercase tracking-wide">Fee</dt>
                             <dd class="font-bold text-2xl text-[#D4A017]">PHP {{ number_format($course->fee, 2) }}</dd>
                         </div>
+                        @if($course->max_participants)
                         <div>
                             <dt class="text-blue-200 text-xs uppercase tracking-wide">Max Participants</dt>
                             <dd class="font-semibold">{{ $course->max_participants }} trainees</dd>
                         </div>
+                        @endif
                         <div>
                             <dt class="text-blue-200 text-xs uppercase tracking-wide">Category</dt>
                             <dd class="font-semibold">{{ $course->category->name ?? 'General' }}</dd>

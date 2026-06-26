@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Schedules</h2>
-    @can('manage schedules')
-    @if(Route::has($p.'.schedules.create'))
-    <a href="{{ route($p.'.schedules.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Schedule</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by course, code, or venue...'])
+        @can('manage schedules')
+        @if(Route::has($p.'.schedules.create'))
+        <a href="{{ route($p.'.schedules.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Schedule</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -34,10 +37,10 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($schedules as $schedule)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $schedule->course->title ?? 'N/A' }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $schedule->course->title ?? 'N/A' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $schedule->start_date->format('M d, Y') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $schedule->end_date->format('M d, Y') }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $schedule->venue }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $schedule->venue }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $schedule->enrollments_count ?? $schedule->enrollments->count() }} / {{ $schedule->capacity }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 py-1 text-xs font-semibold rounded-full

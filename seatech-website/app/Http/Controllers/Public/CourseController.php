@@ -9,6 +9,7 @@ use App\Models\Facility;
 use App\Models\NewsPost;
 use App\Models\Testimonial;
 use App\Models\TrainingSchedule;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -37,12 +38,26 @@ class CourseController extends Controller
         return view('welcome', compact('courses', 'testimonials', 'news', 'facilities'));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with('category')
+        $query = Course::with('category')
             ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->paginate(9);
+            ->orderBy('sort_order');
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->integer('category'));
+        }
+
+        if ($request->filled('q')) {
+            $term = '%' . trim($request->q) . '%';
+            $query->where(function ($q) use ($term) {
+                $q->where('title', 'like', $term)
+                  ->orWhere('code', 'like', $term)
+                  ->orWhere('description', 'like', $term);
+            });
+        }
+
+        $courses = $query->paginate(9)->withQueryString();
 
         $categories = Category::where('is_active', true)
             ->orderBy('name')

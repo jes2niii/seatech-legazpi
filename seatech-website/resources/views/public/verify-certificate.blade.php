@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
 @section('title', 'Verify Certificate - SEATECH Maritime Training')
+@section('meta_description', 'Verify the authenticity of any certificate issued by SEATECH Maritime Training & Assessment Center.')
+@section('og_title', 'Verify a SEATECH Certificate')
+@section('og_description', 'Verify the authenticity of any certificate issued by SEATECH Maritime Training & Assessment Center.')
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-20">

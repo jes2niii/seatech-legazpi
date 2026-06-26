@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -9,14 +10,18 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage courses');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withCount('courses')->latest()->paginate(10);
+        $query = Category::withCount('courses');
+        $query = $this->applySearch($query, $request, ['name']);
+        $categories = $query->latest()->paginate(10)->withQueryString();
         return view('admin.categories.index', compact('categories'));
     }
 

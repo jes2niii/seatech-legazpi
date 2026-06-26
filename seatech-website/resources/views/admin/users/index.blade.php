@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Users</h2>
-    @can('manage users')
-    @if(Route::has($p.'.users.create'))
-    <a href="{{ route($p.'.users.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create User</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by name or email...'])
+        @can('manage users')
+        @if(Route::has($p.'.users.create'))
+        <a href="{{ route($p.'.users.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create User</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))

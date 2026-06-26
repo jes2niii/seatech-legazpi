@@ -5,13 +5,22 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Certificates</h2>
-    @can('manage certificates')
-    @if(Route::has($p.'.certificates.create'))
-    <a href="{{ route($p.'.certificates.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Issue Certificate</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by cert #, student name, or email...'])
+        @if(Route::has($p.'.certificates.export'))
+        <a href="{{ route($p.'.certificates.export') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Export Excel
+        </a>
+        @endif
+        @can('manage certificates')
+        @if(Route::has($p.'.certificates.create'))
+        <a href="{{ route($p.'.certificates.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Issue Certificate</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -33,9 +42,9 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($certificates as $certificate)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $certificate->certificate_number }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $certificate->student->full_name ?? $certificate->student->first_name . ' ' . $certificate->student->last_name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $certificate->course->title ?? 'N/A' }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $certificate->certificate_number }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $certificate->student->full_name ?? $certificate->student->first_name . ' ' . $certificate->student->last_name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $certificate->course->title ?? 'N/A' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $certificate->issued_date->format('M d, Y') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($certificate->is_verified)

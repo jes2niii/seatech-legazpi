@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('duration')->nullable();
             $table->decimal('fee', 10, 2)->default(0);
             $table->text('prerequisites')->nullable();
-            $table->integer('max_participants')->default(30);
+            $table->integer('max_participants')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();

@@ -2,21 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StudentsExport;
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage enrollments');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with('user')->latest()->paginate(10);
+        $query = Student::with('user');
+        $query = $this->applySearch($query, $request, ['first_name', 'last_name', 'email', 'mobile_number']);
+        $students = $query->latest()->paginate(10)->withQueryString();
         return view('admin.students.index', compact('students'));
+    }
+
+    public function export()
+    {
+        $filename = 'students-' . now()->format('Y-m-d-His') . '.xlsx';
+        return Excel::download(new StudentsExport, $filename);
     }
 
     public function create()

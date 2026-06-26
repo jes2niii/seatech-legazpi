@@ -9,7 +9,7 @@
     };
 @endphp
 
-<aside class="w-64 bg-[#003366] text-white flex-shrink-0 hidden lg:block">
+<aside class="w-64 bg-[#003366] text-white flex-shrink-0 hidden lg:block sticky top-0 h-screen overflow-y-auto">
     <div class="p-4 border-b border-[#004080]">
         <a href="{{ route("$p.dashboard") }}" class="flex items-center space-x-3">
             <img src="{{ asset('images/logo.webp') }}" alt="SEATECH Legazpi" class="h-10 w-10 rounded-full object-cover bg-white p-1">
@@ -29,6 +29,14 @@
         @if(Route::has("$p.users.index"))
         <a href="{{ route("$p.users.index") }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-[#004080] hover:text-white transition">
             <span>Users</span>
+        </a>
+        @endif
+        @endcan
+
+        @can('manage settings')
+        @if(Route::has("$p.settings.edit"))
+        <a href="{{ route("$p.settings.edit") }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-[#004080] hover:text-white transition">
+            <span>Site Settings</span>
         </a>
         @endif
         @endcan
@@ -82,6 +90,16 @@
         @if(Route::has("$p.facilities.index"))
         <a href="{{ route("$p.facilities.index") }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-[#004080] hover:text-white transition">
             <span>Facilities</span>
+        </a>
+        @endif
+        @if(Route::has("$p.team.index"))
+        <a href="{{ route("$p.team.index") }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-[#004080] hover:text-white transition">
+            <span>Leadership Team</span>
+        </a>
+        @endif
+        @if(Route::has("$p.core-values.index"))
+        <a href="{{ route("$p.core-values.index") }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-blue-200 hover:bg-[#004080] hover:text-white transition">
+            <span>Core Values</span>
         </a>
         @endif
         @endcan

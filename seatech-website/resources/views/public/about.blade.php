@@ -1,6 +1,14 @@
 @extends('layouts.public')
 
 @section('title', 'About Us - SEATECH Maritime Training')
+@section('meta_description', 'Learn about SEATECH Maritime Training & Assessment Center, our mission, vision, and core values in Bicol.')
+@section('og_title', 'About SEATECH Maritime Training Center')
+@section('og_description', 'Learn about SEATECH Maritime Training & Assessment Center, our mission, vision, and core values in Bicol.')
+
+@php
+    $teamMembers = \App\Models\TeamMember::where('is_active', true)->orderBy('sort_order')->get();
+    $coreValues = \App\Models\CoreValue::active()->ordered()->get();
+@endphp
 
 @section('content')
 {{-- Hero Banner --}}
@@ -21,11 +29,9 @@
                 </div>
                 <div>
                     <h2 class="text-3xl font-bold text-[#003366] mb-4">Our Mission</h2>
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        To provide world-class maritime education and training that meets international standards, 
-                        producing competent, disciplined, and highly skilled seafarers who contribute to the 
-                        global maritime industry.
-                    </p>
+                    <div class="text-gray-700 text-lg leading-relaxed">
+                        {!! format_rich_text(setting('about.mission')) !!}
+                    </div>
                 </div>
             </div>
 
@@ -35,11 +41,9 @@
                 </div>
                 <div>
                     <h2 class="text-3xl font-bold text-[#003366] mb-4">Our Vision</h2>
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        To be the leading maritime training and assessment center in the Bicol Region, 
-                        recognized for excellence in seafarer education, innovation in training 
-                        methodologies, and unwavering commitment to maritime safety and professionalism.
-                    </p>
+                    <div class="text-gray-700 text-lg leading-relaxed">
+                        {!! format_rich_text(setting('about.vision')) !!}
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,49 +51,111 @@
 </section>
 
 {{-- Core Values Section --}}
+@if($coreValues->count() > 0)
 <section class="py-16 lg:py-20 bg-[#F5F7FA]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl lg:text-4xl font-bold text-[#003366] mb-4">Our Core Values</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">The principles that guide every aspect of our training and operations.</p>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            <div class="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="w-14 h-14 bg-[#003366] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div class="flex flex-wrap justify-center gap-6">
+            @foreach($coreValues as $coreValue)
+                <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] grow-0 bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4" style="background-color: {{ $coreValue->color }}">
+                        {!! core_value_icon($coreValue->icon) !!}
+                    </div>
+                    <h3 class="font-bold text-[#003366] mb-2">{{ $coreValue->name }}</h3>
+                    @if($coreValue->description)
+                        <p class="text-gray-600 text-sm text-justify">{{ $coreValue->description }}</p>
+                    @endif
                 </div>
-                <h3 class="font-bold text-[#003366] mb-2">Excellence</h3>
-                <p class="text-gray-600 text-sm">We strive for the highest standards in maritime training and education.</p>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- Company History Section --}}
+<section class="py-16 lg:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="flex items-center mb-6">
+                    <div class="w-1.5 h-10 bg-[#D4A017] rounded mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-[#003366]">Our Story</h2>
+                </div>
+                <div class="space-y-4 text-gray-700 leading-relaxed">
+                    @foreach(setting_group('about.story') as $key => $paragraph)
+                        @php
+                            $paragraph = str_replace(
+                                ['{city}', '{province}', '{name}'],
+                                [setting('address.city'), setting('address.province'), setting('name')],
+                                $paragraph
+                            );
+                        @endphp
+                        {!! format_rich_text($paragraph) !!}
+                    @endforeach
+                </div>
             </div>
-            <div class="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="w-14 h-14 bg-[#D4A017] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
+            <div class="relative">
+                <div class="aspect-[4/3] bg-gradient-to-br from-[#003366] to-[#0077B6] rounded-2xl flex items-center justify-center relative overflow-hidden shadow-xl">
+                    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+                    <div class="relative text-center text-white p-8">
+                        <svg class="w-20 h-20 text-[#D4A017] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p class="text-5xl font-extrabold mb-2">{{ setting('stats.years_excellence') }}+</p>
+                        <p class="text-lg text-blue-200 uppercase tracking-wider">Years of Excellence</p>
+                    </div>
                 </div>
-                <h3 class="font-bold text-[#003366] mb-2">Integrity</h3>
-                <p class="text-gray-600 text-sm">We uphold honesty and transparency in all our dealings.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="w-14 h-14 bg-[#0077B6] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                </div>
-                <h3 class="font-bold text-[#003366] mb-2">Discipline</h3>
-                <p class="text-gray-600 text-sm">We cultivate the discipline essential for success at sea.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="w-14 h-14 bg-[#D4A017] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01"/></svg>
-                </div>
-                <h3 class="font-bold text-[#003366] mb-2">Safety</h3>
-                <p class="text-gray-600 text-sm">Safety is paramount in everything we teach and practice.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="w-14 h-14 bg-[#003366] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                </div>
-                <h3 class="font-bold text-[#003366] mb-2">Service</h3>
-                <p class="text-gray-600 text-sm">We are dedicated to serving our students and the maritime community.</p>
             </div>
         </div>
     </div>
 </section>
+
+{{-- Leadership Team Section --}}
+@if($teamMembers->count() > 0)
+<section class="py-16 lg:py-20 bg-[#F5F7FA]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-1.5 h-10 bg-[#D4A017] rounded mr-4"></div>
+                <h2 class="text-3xl lg:text-4xl font-bold text-[#003366]">Our Leadership Team</h2>
+            </div>
+            <p class="text-gray-600 max-w-2xl mx-auto">Meet the experienced professionals leading SEATECH's mission to deliver world-class maritime training.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-{{ min($teamMembers->count(), 4) }} gap-6">
+            @foreach($teamMembers as $member)
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition text-center">
+                    <div class="aspect-square bg-gradient-to-br from-[#003366] to-[#0077B6] relative overflow-hidden">
+                        @if($member->hasMedia('photo'))
+                            <img src="{{ $member->getFirstMediaUrl('photo') }}" alt="{{ $member->name }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white text-4xl font-bold">
+                                    {{ strtoupper(substr($member->name, 0, 1)) }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-[#003366] text-lg">{{ $member->name }}</h3>
+                        <p class="text-[#D4A017] font-medium text-sm mt-1">{{ $member->position }}</p>
+                        @if($member->department)
+                            <p class="text-gray-500 text-xs mt-0.5">{{ $member->department }}</p>
+                        @endif
+                        @if($member->bio)
+                            <p class="text-gray-600 text-sm mt-3 line-clamp-3">{{ $member->bio }}</p>
+                        @endif
+                        @if($member->email || $member->phone)
+                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                                @if($member->email)<p>{{ $member->email }}</p>@endif
+                                @if($member->phone)<p>{{ $member->phone }}</p>@endif
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 @endsection

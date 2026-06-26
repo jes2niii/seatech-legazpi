@@ -66,7 +66,7 @@
             </div>
 
             <div>
-                <label for="max_participants" class="block text-sm font-medium text-gray-700 mb-1">Max Participants <span class="text-red-500">*</span></label>
+                <label for="max_participants" class="block text-sm font-medium text-gray-700 mb-1">Max Participants</label>
                 <input type="number" name="max_participants" id="max_participants" value="{{ old('max_participants') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20">
                 @error('max_participants') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>

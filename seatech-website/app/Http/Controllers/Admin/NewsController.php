@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\NewsPost;
 use Illuminate\Http\Request;
@@ -9,14 +10,18 @@ use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage news');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $news = NewsPost::with('author')->latest()->paginate(10);
+        $query = NewsPost::with('author');
+        $query = $this->applySearch($query, $request, ['title', 'content']);
+        $news = $query->latest()->paginate(10)->withQueryString();
         return view('admin.news.index', compact('news'));
     }
 

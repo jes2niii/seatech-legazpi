@@ -1,7 +1,48 @@
 @extends('layouts.public')
 
 @section('title', 'SEATECH Maritime Training & Assessment Center')
-@section('meta_description', 'Home of Maritime Training and Assessment for Seafarers at the Capital City of Bicol')
+@section('meta_description', 'Home of Maritime Training and Assessment for Seafarers at the Capital City of Bicol. STCW-compliant courses, modern facilities, and expert instructors.')
+@section('og_title', 'SEATECH Maritime Training & Assessment Center')
+@section('og_description', 'Home of Maritime Training and Assessment for Seafarers at the Capital City of Bicol. STCW-compliant courses, modern facilities, and expert instructors.')
+
+@push('jsonld')
+@php
+    $jsonLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'LocalBusiness',
+        '@id' => route('home'),
+        'name' => setting('name'),
+        'description' => setting('seo.default_description') . '.',
+        'url' => route('home'),
+        'logo' => asset('images/logo.webp'),
+        'image' => asset('images/logo.webp'),
+        'telephone' => setting('contact.phone_raw'),
+        'email' => setting('contact.email'),
+        'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => setting('address.street'),
+            'addressLocality' => setting('address.city'),
+            'addressRegion' => setting('address.province'),
+            'addressCountry' => setting('address.country_code'),
+        ],
+        'openingHoursSpecification' => [
+            '@type' => 'OpeningHoursSpecification',
+            'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            'opens' => '08:00',
+            'closes' => '17:00',
+        ],
+        'sameAs' => array_values(array_filter([
+            setting('social.facebook'),
+            setting('social.instagram'),
+            setting('social.youtube'),
+            setting('social.linkedin'),
+        ])),
+    ];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
 
 @push('styles')
 <style>

@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Testimonials</h2>
-    @can('manage gallery')
-    @if(Route::has($p.'.testimonials.create'))
-    <a href="{{ route($p.'.testimonials.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Testimonial</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by student, course, or content...'])
+        @can('manage gallery')
+        @if(Route::has($p.'.testimonials.create'))
+        <a href="{{ route($p.'.testimonials.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create Testimonial</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -32,8 +35,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($testimonials as $testimonial)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $testimonial->student_name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $testimonial->course_taken }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $testimonial->student_name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $testimonial->course_taken }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-[#D4A017]">
                     @for($i = 1; $i <= 5; $i++)
                         @if($i <= $testimonial->rating) &#9733; @else &#9734; @endif

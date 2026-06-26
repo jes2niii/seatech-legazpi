@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
 @section('title', 'News & Announcements - SEATECH Maritime Training')
+@section('meta_description', 'Stay informed with the latest announcements, training updates, and maritime industry news from SEATECH.')
+@section('og_title', 'News & Announcements - SEATECH')
+@section('og_description', 'Stay informed with the latest announcements, training updates, and maritime industry news from SEATECH.')
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-20">

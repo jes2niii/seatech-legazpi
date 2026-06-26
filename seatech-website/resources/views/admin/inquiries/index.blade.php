@@ -5,8 +5,11 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Inquiries</h2>
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search inquiries...'])
+    </div>
 </div>
 
 @if(session('success'))
@@ -28,9 +31,9 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($inquiries as $inquiry)
             <tr class="hover:bg-gray-50 {{ !$inquiry->is_read ? 'bg-blue-50' : '' }}">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $inquiry->name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $inquiry->email }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $inquiry->subject }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $inquiry->name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $inquiry->email }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $inquiry->subject }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $inquiry->created_at->format('M d, Y h:i A') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($inquiry->is_read)

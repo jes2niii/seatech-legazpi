@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage gallery');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $facilities = Facility::latest()->paginate(10);
+        $query = Facility::query();
+        $query = $this->applySearch($query, $request, ['name', 'description']);
+        $facilities = $query->latest()->paginate(10)->withQueryString();
         return view('admin.facilities.index', compact('facilities'));
     }
 

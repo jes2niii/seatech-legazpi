@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Enrollment;
@@ -11,15 +12,27 @@ use Illuminate\Http\Request;
 
 class CertificateController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage certificates');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $certificates = Certificate::with(['student', 'course'])->latest()->paginate(10);
+        $query = Certificate::with(['student', 'course']);
+        $query = $this->applySearch($query, $request, ['certificate_number'], [
+            'student' => ['first_name', 'last_name', 'email'],
+        ]);
+        $certificates = $query->latest()->paginate(10)->withQueryString();
         return view('admin.certificates.index', compact('certificates'));
+    }
+
+    public function export()
+    {
+        $filename = 'certificates-' . now()->format('Y-m-d-His') . '.xlsx';
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CertificatesExport, $filename);
     }
 
     public function create()

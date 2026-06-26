@@ -5,13 +5,16 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All News</h2>
-    @can('manage news')
-    @if(Route::has($p.'.news.create'))
-    <a href="{{ route($p.'.news.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create News</a>
-    @endif
-    @endcan
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search news...'])
+        @can('manage news')
+        @if(Route::has($p.'.news.create'))
+        <a href="{{ route($p.'.news.create') }}" class="bg-[#0077B6] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#005f94] transition">+ Create News</a>
+        @endif
+        @endcan
+    </div>
 </div>
 
 @if(session('success'))
@@ -32,8 +35,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($news as $article)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $article->title }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $article->author ?? 'SEATECH' }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $article->title }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $article->author ?? 'SEATECH' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($article->is_published)
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Published</span>

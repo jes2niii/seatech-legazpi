@@ -5,9 +5,10 @@
 
 @section('content')
 @php $p = request()->segment(1); @endphp
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold text-gray-800">All Enrollments</h2>
-    <div class="flex space-x-2">
+    <div class="flex flex-wrap items-center gap-2">
+        @include('admin.partials.search', ['placeholder' => 'Search by student, course, or cert #...'])
         <form method="GET" action="{{ route($p.'.enrollments.index') }}">
             <select name="status" onchange="this.form.submit()" class="border-gray-300 rounded-lg text-sm shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20">
                 <option value="">All Statuses</option>
@@ -18,6 +19,12 @@
                 <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
             </select>
         </form>
+        @if(Route::has($p.'.enrollments.export'))
+        <a href="{{ route($p.'.enrollments.export') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Export Excel
+        </a>
+        @endif
     </div>
 </div>
 
@@ -40,8 +47,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse($enrollments as $enrollment)
             <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $enrollment->student->full_name ?? $enrollment->student->first_name . ' ' . $enrollment->student->last_name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $enrollment->trainingSchedule->course->title ?? 'N/A' }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-words max-w-xs">{{ $enrollment->student->full_name ?? $enrollment->student->first_name . ' ' . $enrollment->student->last_name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 break-words max-w-xs">{{ $enrollment->trainingSchedule->course->title ?? 'N/A' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ optional($enrollment->trainingSchedule)->start_date->format('M d, Y') ?? 'N/A' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 py-1 text-xs font-semibold rounded-full

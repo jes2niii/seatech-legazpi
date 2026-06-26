@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Category;
@@ -10,14 +11,18 @@ use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage courses');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with('category')->latest()->paginate(10);
+        $query = Course::with('category');
+        $query = $this->applySearch($query, $request, ['title', 'code', 'description']);
+        $courses = $query->latest()->paginate(10)->withQueryString();
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -37,7 +42,7 @@ class CourseController extends Controller
             'duration' => 'nullable|string|max:100',
             'fee' => 'required|numeric|min:0',
             'prerequisites' => 'nullable|string',
-            'max_participants' => 'required|integer|min:1',
+            'max_participants' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'featured_image' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
         ]);
@@ -76,7 +81,7 @@ class CourseController extends Controller
             'duration' => 'nullable|string|max:100',
             'fee' => 'required|numeric|min:0',
             'prerequisites' => 'nullable|string',
-            'max_participants' => 'required|integer|min:1',
+            'max_participants' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'featured_image' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
         ]);

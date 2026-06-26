@@ -4,8 +4,8 @@
             <a href="{{ route('home') }}" class="flex items-center space-x-3">
                 <img src="{{ asset('images/logo.webp') }}" alt="SEATECH Legazpi" class="h-10 w-auto">
                 <div class="hidden sm:block">
-                    <span class="text-[#003366] font-bold text-lg leading-tight block">SEATECH Legazpi</span>
-                    <span class="text-[#0077B6] text-xs leading-tight block">Maritime Training Center</span>
+                    <span class="text-[#003366] font-bold text-lg leading-tight block">{{ setting('short_name') }}</span>
+                    <span class="text-[#0077B6] text-xs leading-tight block">{{ setting('tagline') }}</span>
                 </div>
             </a>
 

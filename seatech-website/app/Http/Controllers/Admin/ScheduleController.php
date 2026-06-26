@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\TrainingSchedule;
 use App\Models\Course;
@@ -9,14 +10,20 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage schedules');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = TrainingSchedule::with('course')->latest()->paginate(10);
+        $query = TrainingSchedule::with('course');
+        $query = $this->applySearch($query, $request, ['venue'], [
+            'course' => ['title', 'code'],
+        ]);
+        $schedules = $query->latest()->paginate(10)->withQueryString();
         return view('admin.schedules.index', compact('schedules'));
     }
 

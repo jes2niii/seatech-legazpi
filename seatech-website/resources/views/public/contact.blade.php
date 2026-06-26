@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
 @section('title', 'Contact Us - SEATECH Maritime Training')
+@section('meta_description', 'Get in touch with SEATECH Maritime Training Center in Legazpi City, Albay, Philippines. Call, email, or visit our office.')
+@section('og_title', 'Contact SEATECH Maritime Training')
+@section('og_description', 'Get in touch with SEATECH Maritime Training Center in Legazpi City, Albay, Philippines.')
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-20">
@@ -18,22 +21,22 @@
                     <svg class="w-7 h-7 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
                 <h3 class="font-bold text-lg mb-2">Visit Us</h3>
-                <p class="text-blue-200 text-sm leading-relaxed">Legazpi City, Albay<br>Philippines</p>
+                <p class="text-blue-200 text-sm leading-relaxed">{{ setting('address.city') }}, {{ setting('address.province') }}<br>{{ setting('address.country') }}</p>
             </div>
             <div class="bg-gradient-to-br from-[#003366] to-[#0077B6] text-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition">
                 <div class="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                     <svg class="w-7 h-7 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                 </div>
                 <h3 class="font-bold text-lg mb-2">Call Us</h3>
-                <p class="text-blue-200 text-sm">+63 (XXX) XXX-XXXX</p>
-                <p class="text-blue-200 text-xs mt-1">Mon - Fri, 8AM - 5PM</p>
+                <p class="text-blue-200 text-sm">{{ setting('contact.phone') }}</p>
+                <p class="text-blue-200 text-xs mt-1">Mon - Fri, {{ setting('hours.weekdays') }}</p>
             </div>
             <div class="bg-gradient-to-br from-[#003366] to-[#0077B6] text-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition">
                 <div class="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                     <svg class="w-7 h-7 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
                 <h3 class="font-bold text-lg mb-2">Email Us</h3>
-                <p class="text-blue-200 text-sm">info@seatechmaritime.com</p>
+                <p class="text-blue-200 text-sm">{{ setting('contact.email') }}</p>
                 <p class="text-blue-200 text-xs mt-1">We reply within 24 hours</p>
             </div>
         </div>
@@ -92,14 +95,14 @@
                         Office Hours
                     </h3>
                     <ul class="space-y-1 text-sm text-gray-700">
-                        <li class="flex justify-between"><span>Monday - Friday</span><span class="font-medium">8:00 AM - 5:00 PM</span></li>
-                        <li class="flex justify-between"><span>Saturday</span><span class="font-medium">9:00 AM - 12:00 PM</span></li>
-                        <li class="flex justify-between"><span>Sunday</span><span class="font-medium text-red-600">Closed</span></li>
+                        <li class="flex justify-between"><span>Monday - Friday</span><span class="font-medium">{{ setting('hours.weekdays') }}</span></li>
+                        <li class="flex justify-between"><span>Saturday</span><span class="font-medium">{{ setting('hours.saturday') }}</span></li>
+                        <li class="flex justify-between"><span>Sunday</span><span class="font-medium text-red-600">{{ setting('hours.sunday') }}</span></li>
                     </ul>
                 </div>
 
                 <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124240.74800137316!2d123.70017!3d13.13906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a101fbcd5b4e5f%3A0x2bb1f0b2c0e0f0f0!2sLegazpi%20City%2C%20Albay!5e0!3m2!1sen!2sph!4v1700000000000" width="100%" height="320" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="{{ setting('maps.embed_url') }}" width="100%" height="320" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>

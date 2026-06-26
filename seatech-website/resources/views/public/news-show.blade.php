@@ -1,6 +1,40 @@
 @extends('layouts.public')
 
 @section('title', $post->title . ' - SEATECH Maritime Training')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($post->excerpt ?? $post->body), 160))
+@section('og_title', $post->title)
+@section('og_description', \Illuminate\Support\Str::limit(strip_tags($post->excerpt ?? $post->body), 200))
+@section('og_type', 'article')
+
+@push('jsonld')
+@php
+$jsonLd = [
+    '@context' => 'https://schema.org',
+    '@type' => 'NewsArticle',
+    'headline' => $post->title,
+    'description' => strip_tags($post->excerpt ?? ''),
+    'datePublished' => optional($post->published_at)->toIso8601String(),
+    'dateModified' => $post->updated_at?->toIso8601String(),
+    'author' => [
+        '@type' => 'Person',
+        'name' => $post->author->name ?? 'SEATECH',
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => 'SEATECH Maritime Training & Assessment Center',
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => asset('images/logo.webp'),
+        ],
+    ],
+    'image' => $post->hasMedia('featured_image') ? $post->getFirstMediaUrl('featured_image') : asset('images/logo.webp'),
+    'mainEntityOfPage' => route('news.show', $post),
+];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
 
 @section('content')
 <article class="bg-white">

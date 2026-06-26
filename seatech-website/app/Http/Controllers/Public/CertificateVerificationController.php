@@ -10,7 +10,10 @@ class CertificateVerificationController extends Controller
 {
     public function show()
     {
-        return view('public.verify-certificate');
+        return view('public.verify-certificate', [
+            'certificate' => null,
+            'scanned_number' => null,
+        ]);
     }
 
     public function verify(Request $request)

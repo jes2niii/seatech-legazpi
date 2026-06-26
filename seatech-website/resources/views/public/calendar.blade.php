@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
 @section('title', 'Training Calendar - SEATECH Maritime Training')
+@section('meta_description', 'View upcoming maritime training schedules and reserve your slot for the next batch at SEATECH Legazpi.')
+@section('og_title', 'Training Calendar - SEATECH')
+@section('og_description', 'View upcoming maritime training schedules and reserve your slot for the next batch at SEATECH Legazpi.')
 
 @section('content')
 <section class="bg-gradient-to-r from-[#003366] to-[#0077B6] py-20">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,14 +11,18 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    use Searchable;
+
     public function __construct()
     {
         $this->middleware('permission:manage users');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->latest()->paginate(10);
+        $query = User::with('roles');
+        $query = $this->applySearch($query, $request, ['name', 'email']);
+        $users = $query->latest()->paginate(10)->withQueryString();
         return view('admin.users.index', compact('users'));
     }
 
