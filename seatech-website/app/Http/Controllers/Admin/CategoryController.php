@@ -22,6 +22,7 @@ class CategoryController extends Controller
         $query = Category::withCount('courses');
         $query = $this->applySearch($query, $request, ['name']);
         $categories = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -55,7 +56,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'name' => 'required|string|max:255|unique:categories,name,'.$category->id,
             'description' => 'nullable|string',
             'icon' => 'nullable|string|max:100',
             'is_active' => 'boolean',
@@ -76,6 +77,7 @@ class CategoryController extends Controller
                 ->with('error', 'Cannot delete category with associated courses.');
         }
         $category->delete();
+
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

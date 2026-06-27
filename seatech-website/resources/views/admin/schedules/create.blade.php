@@ -21,6 +21,18 @@
                 @error('course_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
+            <div class="md:col-span-2">
+                <label for="instructor_id" class="block text-sm font-medium text-gray-700 mb-1">Assigned Instructor</label>
+                <select name="instructor_id" id="instructor_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20">
+                    <option value="">Unassigned</option>
+                    @foreach($instructors as $instructor)
+                        <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }} ({{ $instructor->email }})</option>
+                    @endforeach
+                </select>
+                @error('instructor_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <p class="text-xs text-gray-500 mt-1">Only users with the Instructor role can be assigned.</p>
+            </div>
+
             <div>
                 <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date <span class="text-red-500">*</span></label>
                 <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20">

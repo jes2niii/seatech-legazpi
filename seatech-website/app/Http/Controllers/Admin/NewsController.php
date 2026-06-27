@@ -22,6 +22,7 @@ class NewsController extends Controller
         $query = NewsPost::with('author');
         $query = $this->applySearch($query, $request, ['title', 'content']);
         $news = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.news.index', compact('news'));
     }
 
@@ -60,6 +61,7 @@ class NewsController extends Controller
     public function edit(NewsPost $newsPost)
     {
         $news = $newsPost;
+
         return view('admin.news.edit', compact('news'));
     }
 
@@ -77,7 +79,7 @@ class NewsController extends Controller
         $data['is_published'] = $request->boolean('is_published');
 
         $news = $newsPost;
-        if ($data['is_published'] && !$news->published_at) {
+        if ($data['is_published'] && ! $news->published_at) {
             $data['published_at'] = now();
         }
 
@@ -94,6 +96,7 @@ class NewsController extends Controller
     {
         $newsPost->clearMediaCollection('featured_image');
         $newsPost->delete();
+
         return redirect()->route('admin.news.index')->with('success', 'News post deleted successfully.');
     }
 }

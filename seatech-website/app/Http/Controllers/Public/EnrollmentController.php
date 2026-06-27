@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Mail\EnrollmentSubmitted;
 use App\Models\Category;
-use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\TrainingSchedule;
@@ -19,7 +18,7 @@ class EnrollmentController extends Controller
         $categories = Category::where('is_active', true)
             ->with(['courses' => function ($query) {
                 $query->where('is_active', true)->orderBy('sort_order')->with(['trainingSchedules' => function ($q) {
-                    $q->whereIn('status', ['upcoming', 'ongoing'])->orderBy('start_date');
+                    $q->whereIn('status', ['upcoming', 'ongoing'])->orderBy('start_date')->with('instructor');
                 }]);
             }])
             ->orderBy('sort_order')

@@ -35,12 +35,36 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Current Photos</label>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         @foreach($facility->getMedia('photos') as $photo)
-                            <div class="relative group">
+                            <div class="relative group" id="photo-{{ $photo->id }}">
                                 <img src="{{ $photo->getUrl() }}" alt="Facility photo" class="h-24 w-full object-cover rounded-lg border border-gray-200">
+                                <button type="button"
+                                        onclick="
+                                            if (confirm('Delete this photo? This cannot be undone.')) {
+                                                fetch('{{ route($p.'.facilities.photos.destroy', [$facility, $photo->id]) }}', {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                        'Accept': 'application/json',
+                                                    }
+                                                }).then(r => r.json()).then(data => {
+                                                    if (data.success) {
+                                                        document.getElementById('photo-{{ $photo->id }}').remove();
+                                                    } else {
+                                                        alert('Failed to delete photo.');
+                                                    }
+                                                }).catch(() => alert('An error occurred.'));
+                                            }
+                                        "
+                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition hover:bg-red-700 shadow-lg"
+                                        title="Delete this photo">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
                             </div>
                         @endforeach
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">Uploading new photos will add to the collection.</p>
+                    <p class="text-xs text-gray-500 mt-2">Hover over a photo to reveal the delete button. Uploading new photos will add to the collection.</p>
                 </div>
             @endif
 

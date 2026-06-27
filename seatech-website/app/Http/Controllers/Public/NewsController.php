@@ -16,12 +16,10 @@ class NewsController extends Controller
         return view('public.news', compact('posts'));
     }
 
-    public function show($article)
+    public function show(NewsPost $article)
     {
-        $post = NewsPost::where('slug', $article)
-            ->where('is_published', true)
-            ->firstOrFail();
+        abort_unless($article->is_published, 404);
 
-        return view('public.news-show', compact('post'));
+        return view('public.news-show', ['post' => $article]);
     }
 }

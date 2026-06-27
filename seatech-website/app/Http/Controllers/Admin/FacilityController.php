@@ -21,6 +21,7 @@ class FacilityController extends Controller
         $query = Facility::query();
         $query = $this->applySearch($query, $request, ['name', 'description']);
         $facilities = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.facilities.index', compact('facilities'));
     }
 
@@ -95,6 +96,7 @@ class FacilityController extends Controller
                 return $decoded;
             }
         }
+
         return array_values(array_filter(array_map('trim', explode(',', $value))));
     }
 
@@ -102,6 +104,15 @@ class FacilityController extends Controller
     {
         $facility->clearMediaCollection('photos');
         $facility->delete();
+
         return redirect()->route('admin.facilities.index')->with('success', 'Facility deleted successfully.');
+    }
+
+    public function deletePhoto(Facility $facility, $mediaId)
+    {
+        $media = $facility->media()->findOrFail($mediaId);
+        $media->delete();
+
+        return response()->json(['success' => true, 'message' => 'Photo deleted successfully.']);
     }
 }

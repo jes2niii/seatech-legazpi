@@ -4,6 +4,32 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
+@if(!empty($isInstructor) && $isInstructor)
+    <div class="bg-white rounded-lg shadow p-6 mb-6 border-l-4 border-[#D4A017]">
+        <h2 class="text-lg font-semibold text-[#003366] mb-4">My Upcoming Schedules</h2>
+        @if(isset($mySchedules) && $mySchedules->count())
+            <ul class="divide-y divide-gray-200">
+                @foreach($mySchedules as $schedule)
+                    <li class="py-3 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <p class="font-semibold text-gray-900">{{ $schedule->course->code ?? '' }} — {{ $schedule->course->title ?? 'N/A' }}</p>
+                            <p class="text-sm text-gray-600">{{ $schedule->start_date->format('M d, Y') }} – {{ $schedule->end_date->format('M d, Y') }} · {{ $schedule->venue ?: 'Venue TBA' }}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full
+                            @if($schedule->status == 'upcoming') bg-blue-100 text-blue-800
+                            @elseif($schedule->status == 'ongoing') bg-yellow-100 text-yellow-800
+                            @else bg-gray-100 text-gray-800 @endif">
+                            {{ ucfirst($schedule->status) }}
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p class="text-gray-500 text-sm">You have no upcoming schedules assigned to you yet.</p>
+        @endif
+    </div>
+@endif
+
 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-4 mb-8">
     <div class="bg-white rounded-lg shadow p-4 border-t-4 border-[#003366]">
         <h3 class="text-xs font-medium text-gray-500 uppercase">Students</h3>

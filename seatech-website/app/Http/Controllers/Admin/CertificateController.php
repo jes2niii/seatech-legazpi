@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CertificatesExport;
 use App\Http\Controllers\Concerns\Searchable;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
+use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Student;
-use App\Models\Course;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CertificateController extends Controller
 {
@@ -26,13 +28,15 @@ class CertificateController extends Controller
             'student' => ['first_name', 'last_name', 'email'],
         ]);
         $certificates = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.certificates.index', compact('certificates'));
     }
 
     public function export()
     {
-        $filename = 'certificates-' . now()->format('Y-m-d-His') . '.xlsx';
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CertificatesExport, $filename);
+        $filename = 'certificates-'.now()->format('Y-m-d-His').'.xlsx';
+
+        return Excel::download(new CertificatesExport, $filename);
     }
 
     public function create()
@@ -43,6 +47,7 @@ class CertificateController extends Controller
             ->whereIn('status', ['completed', 'approved'])
             ->orderByDesc('id')
             ->get();
+
         return view('admin.certificates.create', compact('students', 'courses', 'enrollments'));
     }
 
@@ -69,6 +74,7 @@ class CertificateController extends Controller
     public function show(Certificate $certificate)
     {
         $certificate->load(['student', 'course', 'enrollment']);
+
         return view('admin.certificates.show', compact('certificate'));
     }
 
@@ -80,6 +86,7 @@ class CertificateController extends Controller
             ->whereIn('status', ['completed', 'approved'])
             ->orderByDesc('id')
             ->get();
+
         return view('admin.certificates.edit', compact('certificate', 'students', 'courses', 'enrollments'));
     }
 
@@ -89,7 +96,7 @@ class CertificateController extends Controller
             'enrollment_id' => 'nullable|exists:enrollments,id',
             'student_id' => 'required|exists:students,id',
             'course_id' => 'required|exists:courses,id',
-            'certificate_number' => 'required|string|max:100|unique:certificates,certificate_number,' . $certificate->id,
+            'certificate_number' => 'required|string|max:100|unique:certificates,certificate_number,'.$certificate->id,
             'issued_date' => 'required|date',
             'qr_code' => 'nullable|string',
             'is_verified' => 'boolean',
@@ -111,6 +118,7 @@ class CertificateController extends Controller
     public function destroy(Certificate $certificate)
     {
         $certificate->delete();
+
         return redirect()->route('admin.certificates.index')->with('success', 'Certificate deleted successfully.');
     }
 }

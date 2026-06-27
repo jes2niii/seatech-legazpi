@@ -75,6 +75,13 @@
                 @error('prerequisites') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
+            <div class="md:col-span-2">
+                <label for="learning_outcomes" class="block text-sm font-medium text-gray-700 mb-1">Learning Outcomes</label>
+                <textarea name="learning_outcomes" id="learning_outcomes" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20" placeholder="What will trainees be able to do after completing this course?">{{ old('learning_outcomes', $course->learning_outcomes) }}</textarea>
+                <p class="text-xs text-gray-500 mt-1">Tip: use <code class="bg-gray-100 px-1 rounded">- </code> at the start of a line for bullet points.</p>
+                @error('learning_outcomes') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
             <div>
                 <label for="max_participants" class="block text-sm font-medium text-gray-700 mb-1">Max Participants</label>
                 <input type="number" name="max_participants" id="max_participants" value="{{ old('max_participants', $course->max_participants) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#0077B6] focus:ring focus:ring-[#0077B6] focus:ring-opacity-20">

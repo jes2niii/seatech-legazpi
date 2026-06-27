@@ -55,6 +55,17 @@
             <label class="block text-sm font-medium text-gray-500">Capacity</label>
             <p class="text-gray-900">{{ $schedule->enrolled_count ?? 0 }} / {{ $schedule->capacity }}</p>
         </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-500">Assigned Instructor</label>
+            <p class="text-gray-900">
+                @if($schedule->instructor)
+                    <span class="font-medium">{{ $schedule->instructor->name }}</span>
+                    <span class="text-gray-500 text-sm">({{ $schedule->instructor->email }})</span>
+                @else
+                    <span class="text-gray-400 italic">Unassigned</span>
+                @endif
+            </p>
+        </div>
     </div>
 </div>
 @endsection

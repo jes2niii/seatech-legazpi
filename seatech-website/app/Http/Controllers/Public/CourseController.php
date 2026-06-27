@@ -17,6 +17,7 @@ class CourseController extends Controller
     {
         $courses = Course::with('category')
             ->where('is_active', true)
+            ->notArchived()
             ->orderBy('sort_order')
             ->take(6)
             ->get();
@@ -42,6 +43,7 @@ class CourseController extends Controller
     {
         $query = Course::with('category')
             ->where('is_active', true)
+            ->notArchived()
             ->orderBy('sort_order');
 
         if ($request->filled('category')) {
@@ -49,11 +51,11 @@ class CourseController extends Controller
         }
 
         if ($request->filled('q')) {
-            $term = '%' . trim($request->q) . '%';
+            $term = '%'.trim($request->q).'%';
             $query->where(function ($q) use ($term) {
                 $q->where('title', 'like', $term)
-                  ->orWhere('code', 'like', $term)
-                  ->orWhere('description', 'like', $term);
+                    ->orWhere('code', 'like', $term)
+                    ->orWhere('description', 'like', $term);
             });
         }
 
@@ -68,14 +70,16 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        $course->load(['category', 'trainingSchedules']);
+        abort_if($course->isArchived() || ! $course->is_active, 404);
+
+        $course->load(['category', 'trainingSchedules.instructor']);
 
         return view('public.courses-show', compact('course'));
     }
 
     public function calendar()
     {
-        $schedules = TrainingSchedule::with('course')
+        $schedules = TrainingSchedule::with(['course', 'instructor'])
             ->whereIn('status', ['upcoming', 'ongoing'])
             ->orderBy('start_date')
             ->get();

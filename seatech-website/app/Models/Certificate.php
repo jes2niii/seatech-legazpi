@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Certificate extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'enrollment_id', 'student_id', 'course_id', 'certificate_number',
         'issued_date', 'qr_code', 'is_verified',
@@ -33,5 +37,14 @@ class Certificate extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['certificate_number', 'issued_date', 'is_verified'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('certificate');
     }
 }

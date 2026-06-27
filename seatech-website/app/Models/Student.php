@@ -38,6 +38,6 @@ class Student extends Model
 
     public function getFullNameAttribute(): string
     {
-        return trim("{$this->last_name}, {$this->first_name}" . ($this->middle_name ? " {$this->middle_name}" : ''));
+        return trim("{$this->last_name}, {$this->first_name}".($this->middle_name ? " {$this->middle_name}" : ''));
     }
 }

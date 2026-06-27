@@ -35,18 +35,21 @@ class EnrollmentController extends Controller
         ]);
 
         $enrollments = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.enrollments.index', compact('enrollments'));
     }
 
     public function export(Request $request)
     {
-        $filename = 'enrollments-' . now()->format('Y-m-d-His') . '.xlsx';
+        $filename = 'enrollments-'.now()->format('Y-m-d-His').'.xlsx';
+
         return Excel::download(new EnrollmentsExport, $filename);
     }
 
     public function show(Enrollment $enrollment)
     {
         $enrollment->load(['student', 'trainingSchedule.course', 'approver']);
+
         return view('admin.enrollments.show', compact('enrollment'));
     }
 
@@ -85,6 +88,7 @@ class EnrollmentController extends Controller
     public function destroy(Enrollment $enrollment)
     {
         $enrollment->delete();
+
         return redirect()->route('admin.enrollments.index')->with('success', 'Enrollment deleted.');
     }
 }

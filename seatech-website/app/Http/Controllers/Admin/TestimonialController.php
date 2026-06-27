@@ -21,6 +21,7 @@ class TestimonialController extends Controller
         $query = Testimonial::query();
         $query = $this->applySearch($query, $request, ['student_name', 'course_taken', 'content']);
         $testimonials = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.testimonials.index', compact('testimonials'));
     }
 
@@ -73,6 +74,7 @@ class TestimonialController extends Controller
     public function destroy(Testimonial $testimonial)
     {
         $testimonial->delete();
+
         return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial deleted successfully.');
     }
 }

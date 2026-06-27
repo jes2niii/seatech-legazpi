@@ -46,16 +46,16 @@ class SitemapController extends Controller
 
         $urls = array_merge($staticUrls, $courseUrls, $newsUrls);
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
         foreach ($urls as $entry) {
             $xml .= "  <url>\n";
-            $xml .= "    <loc>" . e($entry['url']) . "</loc>\n";
+            $xml .= '    <loc>'.e($entry['url'])."</loc>\n";
             if (! empty($entry['lastmod'])) {
-                $xml .= "    <lastmod>" . e($entry['lastmod']) . "</lastmod>\n";
+                $xml .= '    <lastmod>'.e($entry['lastmod'])."</lastmod>\n";
             }
-            $xml .= "    <changefreq>" . e($entry['changefreq']) . "</changefreq>\n";
-            $xml .= "    <priority>" . e($entry['priority']) . "</priority>\n";
+            $xml .= '    <changefreq>'.e($entry['changefreq'])."</changefreq>\n";
+            $xml .= '    <priority>'.e($entry['priority'])."</priority>\n";
             $xml .= "  </url>\n";
         }
         $xml .= '</urlset>';

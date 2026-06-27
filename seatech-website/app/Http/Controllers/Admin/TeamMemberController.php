@@ -21,6 +21,7 @@ class TeamMemberController extends Controller
         $query = TeamMember::query();
         $query = $this->applySearch($query, $request, ['name', 'position', 'department', 'bio']);
         $members = $query->orderBy('sort_order')->orderBy('name')->paginate(10)->withQueryString();
+
         return view('admin.team.index', compact('members'));
     }
 
@@ -90,6 +91,7 @@ class TeamMemberController extends Controller
     {
         $team->clearMediaCollection('photo');
         $team->delete();
+
         return redirect()->route('admin.team.index')->with('success', 'Team member deleted successfully.');
     }
 }

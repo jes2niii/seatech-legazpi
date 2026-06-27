@@ -29,6 +29,7 @@ class SiteSettingController extends Controller
             'stats' => 'Statistics',
             'seo' => 'SEO Defaults',
         ];
+
         return view('admin.settings.edit', compact('settings', 'groups'));
     }
 
@@ -56,13 +57,14 @@ class SiteSettingController extends Controller
     {
         $result = [];
         foreach ($data as $key => $value) {
-            $newKey = $prefix === '' ? (string) $key : $prefix . '.' . $key;
+            $newKey = $prefix === '' ? (string) $key : $prefix.'.'.$key;
             if (is_array($value)) {
                 $result = array_merge($result, $this->flatten($value, $newKey));
             } else {
                 $result[$newKey] = $value;
             }
         }
+
         return $result;
     }
 }

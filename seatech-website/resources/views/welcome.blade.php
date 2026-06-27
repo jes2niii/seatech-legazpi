@@ -58,6 +58,10 @@
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
             <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-flex items-center gap-2 bg-[#D4A017]/20 border border-[#D4A017]/40 text-[#D4A017] text-xs sm:text-sm font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    MARINA-Accredited Maritime Training
+                </span>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
                     Navigate Your Future With Confidence
                 </h1>
@@ -84,24 +88,30 @@
     </section>
 
     {{-- Statistics Section --}}
-    <section class="bg-[#F5F7FA] py-16 lg:py-20" x-data="{ stats: { years: 0, courses: 0, trained: 0, vessels: 0 }, init() { let observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { this.animateStats(); observer.disconnect(); } }); }, { threshold: 0.3 }); observer.observe(this.$el); }, animateStats() { const duration = 2000; const start = performance.now(); const targets = { years: 15, courses: {{ $courses->count() }}, trained: 5000, vessels: 50 }; const ease = (t) => 1 - Math.pow(1 - t, 3); const frame = (now) => { const elapsed = now - start; const progress = Math.min(elapsed / duration, 1); const eased = ease(progress); this.stats.years = Math.floor(eased * targets.years); this.stats.courses = Math.floor(eased * targets.courses); this.stats.trained = Math.floor(eased * targets.trained); this.stats.vessels = Math.floor(eased * targets.vessels); if (progress < 1) requestAnimationFrame(frame); else { this.stats.years = targets.years; this.stats.courses = targets.courses; this.stats.trained = targets.trained; this.stats.vessels = targets.vessels; } }; requestAnimationFrame(frame); } }">
+    @php
+        $statYears = (int) setting('stats.years_excellence', 15);
+        $statGraduates = (int) setting('stats.graduates', 5000);
+        $statCourses = $courses->count();
+        $statInstructors = (int) setting('stats.certified_instructors', 25);
+    @endphp
+    <section class="bg-[#F5F7FA] py-16 lg:py-20" x-data='{ stats: { years: 0, courses: 0, graduates: 0, instructors: 0 }, init() { let observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { this.animateStats(); observer.disconnect(); } }); }, { threshold: 0.3 }); observer.observe(this.$el); }, animateStats() { const duration = 2000; const start = performance.now(); const targets = { years: {{ $statYears }}, courses: {{ $statCourses }}, graduates: {{ $statGraduates }}, instructors: {{ $statInstructors }} }; const ease = (t) => 1 - Math.pow(1 - t, 3); const frame = (now) => { const elapsed = now - start; const progress = Math.min(elapsed / duration, 1); const eased = ease(progress); this.stats.years = Math.floor(eased * targets.years); this.stats.courses = Math.floor(eased * targets.courses); this.stats.graduates = Math.floor(eased * targets.graduates); this.stats.instructors = Math.floor(eased * targets.instructors); if (progress < 1) requestAnimationFrame(frame); else { this.stats.years = targets.years; this.stats.courses = targets.courses; this.stats.graduates = targets.graduates; this.stats.instructors = targets.instructors; } }; requestAnimationFrame(frame); } }'>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                 <div class="bg-white rounded-2xl shadow-md p-6 lg:p-8 text-center hover:shadow-lg transition">
                     <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.years + '+'">0+</div>
-                    <div class="text-gray-500 font-medium">Years of Excellence</div>
+                    <div class="text-gray-500 font-medium">Years of Service</div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md p-6 lg:p-8 text-center hover:shadow-lg transition">
+                    <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.graduates.toLocaleString() + '+'">0+</div>
+                    <div class="text-gray-500 font-medium">Number of Graduates</div>
                 </div>
                 <div class="bg-white rounded-2xl shadow-md p-6 lg:p-8 text-center hover:shadow-lg transition">
                     <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.courses + '+'">0+</div>
-                    <div class="text-gray-500 font-medium">Courses Offered</div>
+                    <div class="text-gray-500 font-medium">Available Courses</div>
                 </div>
                 <div class="bg-white rounded-2xl shadow-md p-6 lg:p-8 text-center hover:shadow-lg transition">
-                    <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.trained.toLocaleString() + '+'">0+</div>
-                    <div class="text-gray-500 font-medium">Trained Seafarers</div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-md p-6 lg:p-8 text-center hover:shadow-lg transition">
-                    <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.vessels + '+'">0+</div>
-                    <div class="text-gray-500 font-medium">Partner Vessels</div>
+                    <div class="text-4xl lg:text-5xl font-extrabold text-[#003366] mb-2" x-text="stats.instructors + '+'">0+</div>
+                    <div class="text-gray-500 font-medium">Certified Instructors</div>
                 </div>
             </div>
         </div>
@@ -183,9 +193,16 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 text-center border border-white/20 hover:bg-white/20 transition group">
                     <div class="w-16 h-16 bg-[#D4A017]/20 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition">
-                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
-                    <h3 class="text-white font-bold text-lg mb-2">Expert Instructors</h3>
+                    <h3 class="text-white font-bold text-lg mb-2">MARINA Accredited</h3>
+                    <p class="text-blue-200 text-sm leading-relaxed">All programs are MARINA-accredited, meeting the highest national and international maritime standards.</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 text-center border border-white/20 hover:bg-white/20 transition group">
+                    <div class="w-16 h-16 bg-[#D4A017]/20 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition">
+                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Experienced Instructors</h3>
                     <p class="text-blue-200 text-sm leading-relaxed">Learn from seasoned maritime professionals with years of real-world experience at sea.</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 text-center border border-white/20 hover:bg-white/20 transition group">
@@ -197,17 +214,10 @@
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 text-center border border-white/20 hover:bg-white/20 transition group">
                     <div class="w-16 h-16 bg-[#D4A017]/20 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition">
-                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m0 0l-3-3m3 3l-3 3M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                     </div>
-                    <h3 class="text-white font-bold text-lg mb-2">STCW Compliance</h3>
-                    <p class="text-blue-200 text-sm leading-relaxed">All programs adhere to the latest STCW standards and international maritime regulations.</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 text-center border border-white/20 hover:bg-white/20 transition group">
-                    <div class="w-16 h-16 bg-[#D4A017]/20 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition">
-                        <svg class="w-8 h-8 text-[#D4A017]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    </div>
-                    <h3 class="text-white font-bold text-lg mb-2">Flexible Schedule</h3>
-                    <p class="text-blue-200 text-sm leading-relaxed">Convenient class schedules designed to accommodate both working seafarers and new applicants.</p>
+                    <h3 class="text-white font-bold text-lg mb-2">Industry-Relevant Training</h3>
+                    <p class="text-blue-200 text-sm leading-relaxed">Curriculum aligned with international maritime standards and industry demands to keep you competitive.</p>
                 </div>
             </div>
         </div>

@@ -13,7 +13,9 @@
                     <span class="text-sm text-gray-500">{{ $course->code }}</span>
                     <h2 class="text-2xl font-bold text-[#003366] mt-1">{{ $course->title }}</h2>
                 </div>
-                @if($course->is_active)
+                @if($course->isArchived())
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-700">Archived</span>
+                @elseif($course->is_active)
                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                 @else
                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Inactive</span>
@@ -47,7 +49,16 @@
             @if($course->prerequisites)
             <div>
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">Prerequisites</h3>
-                <p class="text-gray-700">{{ $course->prerequisites }}</p>
+                <p class="text-gray-700 whitespace-pre-line">{{ $course->prerequisites }}</p>
+            </div>
+            @endif
+
+            @if($course->learning_outcomes)
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Learning Outcomes</h3>
+                <div class="text-gray-700">
+                    {!! format_rich_text($course->learning_outcomes) !!}
+                </div>
             </div>
             @endif
         </div>
@@ -95,6 +106,18 @@
             <div class="space-y-3">
                 @if(Route::has($p.'.courses.edit'))
                 <a href="{{ route($p.'.courses.edit', $course) }}" class="block w-full text-center bg-[#D4A017] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#b88914] transition">Edit Course</a>
+                @endif
+                @if(Route::has($p.'.courses.archive') && ! $course->isArchived())
+                <form action="{{ route($p.'.courses.archive', $course) }}" method="POST" x-data @submit.prevent="if(confirm('Archive this course?')) $el.submit()">
+                    @csrf
+                    <button type="submit" class="block w-full text-center bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition">Archive Course</button>
+                </form>
+                @endif
+                @if(Route::has($p.'.courses.restore') && $course->isArchived())
+                <form action="{{ route($p.'.courses.restore', $course) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="block w-full text-center bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">Restore Course</button>
+                </form>
                 @endif
                 <a href="{{ route($p.'.courses.index') }}" class="block w-full text-center bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-400 transition">Back to List</a>
                 @if(Route::has($p.'.courses.destroy'))

@@ -21,6 +21,7 @@ class CoreValueController extends Controller
         $query = CoreValue::query();
         $query = $this->applySearch($query, $request, ['name', 'description']);
         $values = $query->orderBy('sort_order')->orderBy('name')->paginate(15)->withQueryString();
+
         return view('admin.core-values.index', compact('values'));
     }
 
@@ -75,6 +76,7 @@ class CoreValueController extends Controller
     public function destroy(CoreValue $coreValue)
     {
         $coreValue->delete();
+
         return redirect()->route('admin.core-values.index')->with('success', 'Core value deleted successfully.');
     }
 }

@@ -23,12 +23,14 @@ class StudentController extends Controller
         $query = Student::with('user');
         $query = $this->applySearch($query, $request, ['first_name', 'last_name', 'email', 'mobile_number']);
         $students = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.students.index', compact('students'));
     }
 
     public function export()
     {
-        $filename = 'students-' . now()->format('Y-m-d-His') . '.xlsx';
+        $filename = 'students-'.now()->format('Y-m-d-His').'.xlsx';
+
         return Excel::download(new StudentsExport, $filename);
     }
 
@@ -59,6 +61,7 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student->load('user', 'enrollments');
+
         return view('admin.students.show', compact('student'));
     }
 
@@ -77,7 +80,7 @@ class StudentController extends Controller
             'gender' => 'nullable|in:male,female,other',
             'address' => 'nullable|string',
             'mobile_number' => 'nullable|string|max:20',
-            'email' => 'required|email|unique:students,email,' . $student->id,
+            'email' => 'required|email|unique:students,email,'.$student->id,
             'seaman_book_number' => 'nullable|string|max:50',
         ]);
 
@@ -89,6 +92,7 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $student->delete();
+
         return redirect()->route('admin.students.index')->with('success', 'Student deleted successfully.');
     }
 }

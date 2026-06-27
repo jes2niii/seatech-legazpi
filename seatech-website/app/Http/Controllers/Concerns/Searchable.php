@@ -12,7 +12,7 @@ trait Searchable
             return $query;
         }
 
-        $term = '%' . trim($request->q) . '%';
+        $term = '%'.trim($request->q).'%';
 
         return $query->where(function ($q) use ($term, $fields, $relations) {
             foreach ($fields as $field) {

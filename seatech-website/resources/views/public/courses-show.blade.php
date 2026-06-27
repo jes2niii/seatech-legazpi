@@ -90,6 +90,15 @@ $jsonLd = [
                     </div>
                 @endif
 
+                @if($course->learning_outcomes)
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+                        <h2 class="text-2xl font-bold text-[#003366] mb-4">Learning Outcomes</h2>
+                        <div class="text-gray-700 leading-relaxed">
+                            {!! format_rich_text($course->learning_outcomes) !!}
+                        </div>
+                    </div>
+                @endif
+
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-2xl font-bold text-[#003366]">Available Schedules</h2>
@@ -104,6 +113,12 @@ $jsonLd = [
                                             <p class="font-semibold text-gray-900">{{ $schedule->start_date->format('M d, Y') }} - {{ $schedule->end_date->format('M d, Y') }}</p>
                                             <p class="text-sm text-gray-600 mt-1">{{ $schedule->venue ?: 'Venue TBA' }}</p>
                                             <p class="text-xs text-gray-500 mt-1">Slots: {{ $schedule->enrolled_count }}/{{ $schedule->capacity }}</p>
+                                            @if($schedule->instructor)
+                                                <p class="text-xs text-[#0077B6] mt-1 flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                    Instructor: <span class="font-medium">{{ $schedule->instructor->name }}</span>
+                                                </p>
+                                            @endif
                                         </div>
                                         <div class="flex flex-col items-end gap-2">
                                             @php
