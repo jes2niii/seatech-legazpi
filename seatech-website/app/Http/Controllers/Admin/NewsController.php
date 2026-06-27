@@ -60,7 +60,7 @@ class NewsController extends Controller
 
     public function edit(NewsPost $newsPost)
     {
-        $news = $newsPost;
+        $news = $this->resolveNews($newsPost);
 
         return view('admin.news.edit', compact('news'));
     }
@@ -78,7 +78,7 @@ class NewsController extends Controller
         $data['slug'] = Str::slug($data['title']);
         $data['is_published'] = $request->boolean('is_published');
 
-        $news = $newsPost;
+        $news = $this->resolveNews($newsPost);
         if ($data['is_published'] && ! $news->published_at) {
             $data['published_at'] = now();
         }
@@ -94,9 +94,28 @@ class NewsController extends Controller
 
     public function destroy(NewsPost $newsPost)
     {
+        $newsPost = $this->resolveNews($newsPost);
         $newsPost->clearMediaCollection('featured_image');
         $newsPost->delete();
 
         return redirect()->route('admin.news.index')->with('success', 'News post deleted successfully.');
+    }
+
+    /**
+     * Resolve a NewsPost from the route binding. Falls back to looking up
+     * the model by the {news} route parameter so we always work with a
+     * fully-loaded instance (the implicit binding is unreliable here).
+     */
+    private function resolveNews(NewsPost $bound): NewsPost
+    {
+        $id = request()->route('news');
+
+        if ($id && $bound->getKey() === (int) $id && $bound->exists) {
+            return $bound;
+        }
+
+        $resolved = $id ? NewsPost::find($id) : null;
+
+        return $resolved ?? $bound;
     }
 }

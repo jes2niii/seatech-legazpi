@@ -9,6 +9,14 @@
     @stack('meta')
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="icon" type="image/webp" href="{{ asset('images/logo.webp') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#003366">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SEATECH">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="{{ asset('images/icon-192.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/icon-192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('images/icon-512.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -26,7 +34,7 @@
     <meta name="twitter:image" content="@yield('og_image', asset('images/logo.webp'))">
     @stack('jsonld')
 </head>
-<body class="font-sans antialiased text-gray-800 bg-white">
+<body class="font-sans antialiased text-gray-800 bg-white" x-data="{ mobileNavOpen: false }">
     <div class="min-h-screen flex flex-col">
         @include('layouts.partials.public-header')
 

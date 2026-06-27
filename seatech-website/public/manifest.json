@@ -1,0 +1,48 @@
+{
+    "name": "SEATECH Maritime Training & Assessment Center",
+    "short_name": "SEATECH",
+    "description": "MARINA-accredited maritime training in Legazpi, Bicol.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#FFFFFF",
+    "theme_color": "#003366",
+    "lang": "en-PH",
+    "dir": "ltr",
+    "categories": ["education", "business"],
+    "icons": [
+        {
+            "src": "/images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/images/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Verify Certificate",
+            "short_name": "Verify",
+            "url": "/verify-certificate",
+            "description": "Verify the authenticity of a SEATECH-issued certificate.",
+            "icons": [
+                {
+                    "src": "/images/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
+}

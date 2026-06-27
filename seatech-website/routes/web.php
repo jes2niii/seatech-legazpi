@@ -50,6 +50,21 @@ Route::get('/verify-certificate/{number}', [CertificateVerificationController::c
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
+// PWA static assets (also served directly by the web server in production).
+Route::get('/manifest.json', function () {
+    return response()->json(json_decode(file_get_contents(public_path('manifest.json')), true))
+        ->header('Content-Type', 'application/manifest+json');
+})->name('manifest');
+Route::get('/sw.js', function () {
+    return response(file_get_contents(public_path('sw.js')))
+        ->header('Content-Type', 'application/javascript')
+        ->header('Service-Worker-Allowed', '/');
+})->name('service-worker');
+Route::get('/offline.html', function () {
+    return response(file_get_contents(public_path('offline.html')))
+        ->header('Content-Type', 'text/html; charset=utf-8');
+})->name('offline');
+
 // Online enrollment
 Route::get('/enroll', [EnrollmentController::class, 'step1'])->name('enroll.step1');
 Route::post('/enroll/step1', [EnrollmentController::class, 'postStep1'])->name('enroll.postStep1');

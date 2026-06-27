@@ -47,10 +47,10 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $article->published_at?->format('M d, Y') ?? $article->created_at->format('M d, Y') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                     @if(Route::has($p.'.news.edit'))
-                    <a href="{{ route($p.'.news.edit', $article) }}" class="text-[#D4A017] hover:underline">Edit</a>
+                    <a href="{{ route($p.'.news.edit', ['news' => $article]) }}" class="text-[#D4A017] hover:underline">Edit</a>
                     @endif
                     @if(Route::has($p.'.news.destroy'))
-                    <form action="{{ route($p.'.news.destroy', $article) }}" method="POST" class="inline" x-data @submit.prevent="if(confirm('Delete this news article?')) $el.submit()">
+                    <form action="{{ route($p.'.news.destroy', ['news' => $article]) }}" method="POST" class="inline" x-data @submit.prevent="if(confirm('Delete this news article?')) $el.submit()">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-600 hover:underline">Delete</button>

@@ -11,19 +11,28 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     @stack('styles')
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="font-sans antialiased bg-gray-100">
+<body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: false }">
     <div class="min-h-screen flex">
         @include('layouts.partials.admin-sidebar')
 
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
             @include('layouts.partials.admin-header')
 
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-4 sm:p-6 min-w-0">
                 @yield('content')
             </main>
         </div>
     </div>
+
+    <div
+        x-show="sidebarOpen"
+        x-cloak
+        x-transition.opacity
+        @click="sidebarOpen = false"
+        class="lg:hidden fixed inset-0 bg-black/50 z-30"
+        aria-hidden="true"></div>
 
     @stack('scripts')
 </body>

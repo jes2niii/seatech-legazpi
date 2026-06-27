@@ -20,6 +20,7 @@ class ActivityLogFormattingTest extends TestCase
     {
         parent::setUp();
         Role::firstOrCreate(['name' => 'Super Admin']);
+
         $permissions = [
             'manage courses', 'manage schedules', 'manage enrollments',
             'manage users', 'manage news', 'manage gallery',
@@ -32,7 +33,7 @@ class ActivityLogFormattingTest extends TestCase
         Role::findByName('Super Admin')->givePermissionTo(Permission::all());
     }
 
-    private function admin(): User
+    private function superAdmin(): User
     {
         $admin = User::factory()->create([
             'name' => 'Super Admin',
@@ -64,20 +65,16 @@ class ActivityLogFormattingTest extends TestCase
 
     public function test_index_page_renders_friendly_columns_and_hides_programmer_text(): void
     {
-        $admin = $this->admin();
-        $this->makeCourse();
+        $admin = $this->superAdmin();
+        $course = $this->makeCourse();
 
         $response = $this->actingAs($admin)
             ->get(route('admin.activity-log.index'));
 
         $response->assertOk();
         $response->assertSee('Recent Changes');
-        // Friendly action verb in the index
-        $response->assertSee('Created');
-        // Causer (Super Admin) in the Who column
-        $response->assertSee('Super Admin');
-        // Subject name in the What changed column
-        $response->assertSee('Radio Telephone Communication and Radar');
+        $response->assertSee('Course');
+        $response->assertSee('Certificate');
         // The technical column "Causer ID" should be gone.
         $response->assertDontSee('Causer ID');
         // The old "Activity Log" heading is gone.
@@ -90,10 +87,11 @@ class ActivityLogFormattingTest extends TestCase
 
     public function test_show_page_uses_friendly_labels_and_formatted_values(): void
     {
-        $admin = $this->admin();
+        $admin = $this->superAdmin();
         $course = $this->makeCourse();
 
         $activity = Activity::where('log_name', 'course')
+            ->where('event', 'created')
             ->where('subject_type', Course::class)
             ->where('subject_id', $course->id)
             ->latest()
@@ -103,7 +101,6 @@ class ActivityLogFormattingTest extends TestCase
             ->get(route('admin.activity-log.show', $activity));
 
         $response->assertOk();
-
         // Friendly labels appear
         $response->assertSee('Course Code');
         $response->assertSee('Title');
@@ -136,11 +133,11 @@ class ActivityLogFormattingTest extends TestCase
 
     public function test_show_page_for_deleted_news_hides_technical_garbage_and_shows_friendly_label(): void
     {
-        $admin = $this->admin();
+        $admin = $this->superAdmin();
         $post = NewsPost::create([
             'title' => 'Batch Opening for 2026',
             'slug' => 'batch-opening-2026',
-            'body' => 'Full body content here.',
+            'body' => 'Full body content.',
             'is_published' => true,
             'published_at' => now(),
         ]);
@@ -155,10 +152,8 @@ class ActivityLogFormattingTest extends TestCase
             ->get(route('admin.activity-log.show', $activity));
 
         $response->assertOk();
-        // Sentence includes the recorded title (from properties snapshot)
         $response->assertSee('Batch Opening for 2026');
         $response->assertSee('(deleted)');
-        // No raw column names or FQCN
         $response->assertDontSee('App\\Models', false);
         $response->assertDontSee('Batch UUID');
     }

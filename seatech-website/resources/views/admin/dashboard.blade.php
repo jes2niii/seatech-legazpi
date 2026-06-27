@@ -61,6 +61,48 @@
     </div>
 </div>
 
+@if(isset($dashboardSettings))
+<div class="mb-8">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-[#003366]">Site Settings</h2>
+        @if(\Illuminate\Support\Facades\Route::has(request()->segment(1).'.settings.edit'))
+        <a href="{{ route(request()->segment(1).'.settings.edit') }}" class="text-sm text-[#0077B6] hover:text-[#003366] font-semibold inline-flex items-center gap-1">
+            Edit settings
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+        @endif
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @include('admin.dashboard.partials.setting-card', [
+            'title' => 'Company',
+            'icon'  => 'building',
+            'rows'  => $dashboardSettings['company'],
+        ])
+        @include('admin.dashboard.partials.setting-card', [
+            'title' => 'Contact',
+            'icon'  => 'phone',
+            'rows'  => $dashboardSettings['contact'],
+        ])
+        @include('admin.dashboard.partials.setting-card', [
+            'title' => 'Office Hours',
+            'icon'  => 'clock',
+            'rows'  => $dashboardSettings['hours'],
+        ])
+        @include('admin.dashboard.partials.setting-card', [
+            'title' => 'Social Media',
+            'icon'  => 'share',
+            'rows'  => $dashboardSettings['social'],
+        ])
+        @include('admin.dashboard.partials.setting-card', [
+            'title' => 'Statistics',
+            'icon'  => 'chart',
+            'rows'  => $dashboardSettings['stats'],
+        ])
+    </div>
+</div>
+@endif
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-lg font-semibold text-gray-800 mb-4">Enrollments & Students (Last 12 Months)</h2>

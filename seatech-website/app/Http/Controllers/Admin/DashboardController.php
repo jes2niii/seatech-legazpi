@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Inquiry;
+use App\Models\SiteSetting;
 use App\Models\Student;
 use App\Models\TrainingSchedule;
 use Carbon\Carbon;
@@ -42,6 +43,8 @@ class DashboardController extends Controller
 
         $chart = $this->buildChartData();
 
+        $dashboardSettings = $this->buildDashboardSettings();
+
         $mySchedules = collect();
         if ($isInstructor) {
             $mySchedules = TrainingSchedule::with('course')
@@ -52,7 +55,10 @@ class DashboardController extends Controller
                 ->get();
         }
 
-        return view('admin.dashboard', compact('stats', 'recent_enrollments', 'recent_inquiries', 'chart', 'mySchedules', 'isInstructor'));
+        return view('admin.dashboard', compact(
+            'stats', 'recent_enrollments', 'recent_inquiries', 'chart',
+            'mySchedules', 'isInstructor', 'dashboardSettings',
+        ));
     }
 
     private function buildChartData(): array
@@ -86,9 +92,9 @@ class DashboardController extends Controller
             ->limit(5)
             ->get(['id', 'code', 'title'])
             ->map(fn ($c) => [
-            'label' => $c->code,
-            'value' => (int) $c->enrollment_count,
-        ])
+                'label' => $c->code,
+                'value' => (int) $c->enrollment_count,
+            ])
             ->all();
 
         return [
@@ -100,6 +106,42 @@ class DashboardController extends Controller
                 'values' => array_values($enrollmentsByStatus),
             ],
             'top_courses' => $topCourses,
+        ];
+    }
+
+    private function buildDashboardSettings(): array
+    {
+        $settings = SiteSetting::getAllCached();
+
+        $val = fn (string $key, ?string $fallback = '—') => $settings[$key] ?? $fallback;
+        $intWithPlus = fn (string $key) => ($v = $settings[$key] ?? null) === null ? '—' : $v.'+';
+
+        return [
+            'company' => [
+                ['label' => 'Full name',  'value' => $val('name')],
+                ['label' => 'Short name', 'value' => $val('short_name')],
+                ['label' => 'Tagline',    'value' => $val('tagline')],
+            ],
+            'contact' => [
+                ['label' => 'Phone', 'value' => $val('contact.phone'), 'href' => $settings['contact.phone_raw'] ?? null, 'href_type' => 'tel'],
+                ['label' => 'Email', 'value' => $val('contact.email'), 'href' => $settings['contact.email'] ?? null, 'href_type' => 'mailto'],
+            ],
+            'hours' => [
+                ['label' => 'Mon–Fri',  'value' => $val('hours.weekdays')],
+                ['label' => 'Saturday', 'value' => $val('hours.saturday')],
+                ['label' => 'Sunday',   'value' => $val('hours.sunday')],
+            ],
+            'social' => [
+                ['label' => 'Facebook',  'value' => $settings['social.facebook'] ?? null, 'icon' => 'facebook'],
+                ['label' => 'Instagram', 'value' => $settings['social.instagram'] ?? null, 'icon' => 'instagram'],
+                ['label' => 'YouTube',   'value' => $settings['social.youtube'] ?? null, 'icon' => 'youtube'],
+                ['label' => 'LinkedIn',  'value' => $settings['social.linkedin'] ?? null, 'icon' => 'linkedin'],
+            ],
+            'stats' => [
+                ['label' => 'Years of service',     'value' => $intWithPlus('stats.years_excellence')],
+                ['label' => 'Graduates',           'value' => $intWithPlus('stats.graduates')],
+                ['label' => 'Certified instructors', 'value' => $intWithPlus('stats.certified_instructors')],
+            ],
         ];
     }
 }

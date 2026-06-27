@@ -9,8 +9,10 @@
     };
 @endphp
 
-<aside class="w-64 bg-[#003366] text-white flex-shrink-0 hidden lg:block sticky top-0 h-screen overflow-y-auto">
-    <div class="p-4 border-b border-[#004080]">
+<aside
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-[#003366] text-white flex-shrink-0 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-auto">
+    <div class="flex items-center justify-between p-4 border-b border-[#004080]">
         <a href="{{ route("$p.dashboard") }}" class="flex items-center space-x-3">
             <img src="{{ asset('images/logo.webp') }}" alt="SEATECH Legazpi" class="h-10 w-10 rounded-full object-cover bg-white p-1">
             <div>
@@ -18,9 +20,18 @@
                 <span class="text-blue-200 text-xs leading-tight block">{{ ucfirst($p) }} Panel</span>
             </div>
         </a>
+        <button
+            type="button"
+            @click="sidebarOpen = false"
+            class="lg:hidden w-9 h-9 inline-flex items-center justify-center rounded-lg text-blue-200 hover:bg-[#004080] hover:text-white transition"
+            aria-label="Close menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
     </div>
 
-    <nav class="py-2">
+    <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-73px)]">
         <a href="{{ route("$p.dashboard") }}" class="flex items-center pl-3 pr-4 py-2 rounded-r-lg text-sm transition {{ nav_link_class("$p.dashboard") }}">
             <span>Dashboard</span>
         </a>

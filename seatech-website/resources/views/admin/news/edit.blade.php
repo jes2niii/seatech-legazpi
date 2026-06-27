@@ -6,7 +6,7 @@
 @section('content')
 @php $p = request()->segment(1); @endphp
 <div class="bg-white rounded-lg shadow p-6">
-    <form action="{{ route($p.'.news.update', $news) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route($p.'.news.update', ['news' => $news]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
 

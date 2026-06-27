@@ -14,6 +14,23 @@
     $subjectLink = activity_subject_link($activity);
     $recordType = $logName ? activity_log_type($logName) : 'Record';
     $sentence = activity_action_sentence($activity);
+
+    $rows = [];
+    foreach ($new as $key => $newVal) {
+        $label = activity_field_label($logName, $key);
+        if ($label === null) {
+            continue;
+        }
+        $oldVal = $old[$key] ?? null;
+        if ($oldVal == $newVal) {
+            continue;
+        }
+        $rows[] = [
+            'label' => $label,
+            'old' => activity_format_value($logName, $key, $oldVal),
+            'new' => activity_format_value($logName, $key, $newVal),
+        ];
+    }
 @endphp
 
 <div class="max-w-5xl mx-auto">
@@ -21,7 +38,6 @@
         <a href="{{ route($p.'.activity-log.index') }}" class="text-[#0077B6] hover:underline text-sm">&larr; Back to Recent Changes</a>
     </div>
 
-    {{-- Header card --}}
     <div class="bg-white rounded-lg shadow p-6 mb-6">
         <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div class="flex items-start gap-4 flex-1 min-w-0">
@@ -58,28 +74,8 @@
         </div>
     </div>
 
-    {{-- Changes card --}}
     <div class="bg-white rounded-lg shadow p-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-3">What changed</h3>
-
-        @php
-            $rows = [];
-            foreach ($new as $key => $newVal) {
-                $label = activity_field_label($logName, $key);
-                if ($label === null) {
-                    continue;
-                }
-                $oldVal = $old[$key] ?? null;
-                if ($oldVal == $newVal) {
-                    continue;
-                }
-                $rows[] = [
-                    'label' => $label,
-                    'old' => activity_format_value($logName, $key, $oldVal),
-                    'new' => activity_format_value($logName, $key, $newVal),
-                ];
-            }
-        @endphp
 
         @if(count($rows) > 0)
             <div class="overflow-x-auto">
