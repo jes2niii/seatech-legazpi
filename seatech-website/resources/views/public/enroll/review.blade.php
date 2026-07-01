@@ -5,7 +5,7 @@
 @section('content')
 <div class="bg-[#F5F7FA] min-h-screen py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        @include('public.enroll.partials.steps', ['current' => 4])
+        @include('public.enroll.partials.steps', ['current' => 5])
 
         <div class="mt-10">
             <h1 class="text-3xl font-bold text-[#003366] mb-2">Review Your Application</h1>
@@ -61,8 +61,20 @@
                                 <p class="font-medium text-gray-800">{{ ucfirst($data['gender'] ?? 'N/A') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Mobile Number</p>
+                                <p class="text-sm text-gray-500">Civil Status</p>
+                                <p class="font-medium text-gray-800">{{ ucfirst($data['civil_status'] ?? 'N/A') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Place of Birth</p>
+                                <p class="font-medium text-gray-800">{{ $data['place_of_birth'] ?? 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Contact No.</p>
                                 <p class="font-medium text-gray-800">{{ $data['mobile_number'] ?? 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Rank / Position</p>
+                                <p class="font-medium text-gray-800">{{ $data['rank'] ?? 'N/A' }}</p>
                             </div>
                             <div class="sm:col-span-2">
                                 <p class="text-sm text-gray-500">Email</p>
@@ -82,6 +94,27 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         <h2 class="text-lg font-bold text-[#003366] mb-4 flex items-center">
                             <span class="w-8 h-8 bg-[#003366] text-white rounded-full flex items-center justify-center text-sm mr-3">3</span>
+                            Emergency Contact
+                        </h2>
+                        <div class="ml-11 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <p class="text-sm text-gray-500">Contact Person</p>
+                                <p class="font-medium text-gray-800">{{ $data['emergency_contact_name'] ?? 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Relationship</p>
+                                <p class="font-medium text-gray-800">{{ $data['emergency_contact_relationship'] ?? 'N/A' }}</p>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <p class="text-sm text-gray-500">Mobile No.</p>
+                                <p class="font-medium text-gray-800">{{ $data['emergency_contact_mobile'] ?? 'N/A' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-bold text-[#003366] mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-[#003366] text-white rounded-full flex items-center justify-center text-sm mr-3">4</span>
                             Requirements Selected
                         </h2>
                         <div class="ml-11">

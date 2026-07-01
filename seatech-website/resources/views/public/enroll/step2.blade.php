@@ -51,9 +51,35 @@
                         </select>
                     </div>
                     <div>
-                        <label for="mobile_number" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                        <input type="text" name="mobile_number" id="mobile_number" value="{{ old('mobile_number') }}"
+                        <label for="civil_status" class="block text-sm font-medium text-gray-700 mb-1">Civil Status</label>
+                        <select name="civil_status" id="civil_status"
                             class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-[#0077B6] focus:border-[#0077B6]">
+                            <option value="">Select Civil Status</option>
+                            <option value="single" @selected(old('civil_status') === 'single')>Single</option>
+                            <option value="married" @selected(old('civil_status') === 'married')>Married</option>
+                            <option value="widowed" @selected(old('civil_status') === 'widowed')>Widowed</option>
+                            <option value="separated" @selected(old('civil_status') === 'separated')>Separated</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label for="place_of_birth" class="block text-sm font-medium text-gray-700 mb-1">Place of Birth</label>
+                        <input type="text" name="place_of_birth" id="place_of_birth" value="{{ old('place_of_birth') }}"
+                            class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-[#0077B6] focus:border-[#0077B6]">
+                    </div>
+                    <div>
+                        <label for="mobile_number" class="block text-sm font-medium text-gray-700 mb-1">Contact No. <span class="text-red-500">*</span></label>
+                        <input type="text" name="mobile_number" id="mobile_number" value="{{ old('mobile_number') }}" required
+                            class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-[#0077B6] focus:border-[#0077B6]">
+                        @error('mobile_number') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="rank" class="block text-sm font-medium text-gray-700 mb-1">Rank / Position</label>
+                        <input type="text" name="rank" id="rank" value="{{ old('rank') }}"
+                            class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-[#0077B6] focus:border-[#0077B6]"
+                            placeholder="e.g., Deck Officer, Engine Cadet">
                     </div>
                 </div>
 
@@ -79,7 +105,7 @@
                 <div class="flex justify-between items-center mt-8">
                     <a href="{{ route('enroll.step1') }}" class="text-sm font-medium text-[#0077B6] hover:text-[#005a8c] transition">&larr; Back to Course Selection</a>
                     <button type="submit" class="bg-[#003366] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#002244] transition text-base">
-                        Continue to Requirements →
+                        Continue to Emergency Contact →
                     </button>
                 </div>
             </form>

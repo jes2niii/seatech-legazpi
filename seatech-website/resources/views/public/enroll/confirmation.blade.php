@@ -20,12 +20,20 @@
                 <p class="text-2xl font-bold text-[#003366]">{{ $enrollment->id }}</p>
             </div>
 
-            <div class="text-left bg-gray-50 rounded-lg p-6 mb-8">
+            <div class="text-left bg-gray-50 rounded-lg p-6 mb-6">
                 <h2 class="font-semibold text-gray-900 mb-3">Submitted Details</h2>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Student</span>
                         <span class="font-medium text-gray-900">{{ $enrollment->student->last_name ?? '' }}, {{ $enrollment->student->first_name ?? '' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Contact No.</span>
+                        <span class="font-medium text-gray-900">{{ $enrollment->student->mobile_number ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Email</span>
+                        <span class="font-medium text-gray-900">{{ $enrollment->student->email ?? 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">Course</span>
@@ -42,6 +50,24 @@
                     <div class="flex justify-between">
                         <span class="text-gray-500">Payment</span>
                         <span class="font-medium text-gray-900 capitalize">{{ str_replace('_', ' ', $enrollment->payment_status) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-left bg-gray-50 rounded-lg p-6 mb-8">
+                <h2 class="font-semibold text-gray-900 mb-3">Emergency Contact</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Contact Person</span>
+                        <span class="font-medium text-gray-900">{{ $enrollment->emergency_contact_name ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Relationship</span>
+                        <span class="font-medium text-gray-900">{{ $enrollment->emergency_contact_relationship ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Mobile No.</span>
+                        <span class="font-medium text-gray-900">{{ $enrollment->emergency_contact_mobile ?? 'N/A' }}</span>
                     </div>
                 </div>
             </div>

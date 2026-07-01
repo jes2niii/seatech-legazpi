@@ -5,7 +5,7 @@
 @section('content')
 <div class="bg-[#F5F7FA] min-h-screen py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        @include('public.enroll.partials.steps', ['current' => 3])
+        @include('public.enroll.partials.steps', ['current' => 4])
 
         <div class="mt-10">
             <h1 class="text-3xl font-bold text-[#003366] mb-2">Requirements</h1>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="flex justify-between items-center mt-8">
-                    <a href="{{ route('enroll.step2') }}" class="text-sm font-medium text-[#0077B6] hover:text-[#005a8c] transition">&larr; Back to Personal Info</a>
+                    <a href="{{ route('enroll.step2_5') }}" class="text-sm font-medium text-[#0077B6] hover:text-[#005a8c] transition">&larr; Back to Emergency Contact</a>
                     <button type="submit" class="bg-[#003366] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#002244] transition text-base">
                         Review Application →
                     </button>

@@ -70,6 +70,8 @@ Route::get('/enroll', [EnrollmentController::class, 'step1'])->name('enroll.step
 Route::post('/enroll/step1', [EnrollmentController::class, 'postStep1'])->name('enroll.postStep1');
 Route::get('/enroll/step2', [EnrollmentController::class, 'step2'])->name('enroll.step2');
 Route::post('/enroll/step2', [EnrollmentController::class, 'postStep2'])->name('enroll.postStep2');
+Route::get('/enroll/step2-5', [EnrollmentController::class, 'step2_5'])->name('enroll.step2_5');
+Route::post('/enroll/step2-5', [EnrollmentController::class, 'postStep2_5'])->name('enroll.postStep2_5');
 Route::get('/enroll/step3', [EnrollmentController::class, 'step3'])->name('enroll.step3');
 Route::post('/enroll/step3', [EnrollmentController::class, 'postStep3'])->name('enroll.postStep3');
 Route::get('/enroll/review', [EnrollmentController::class, 'review'])->name('enroll.review');

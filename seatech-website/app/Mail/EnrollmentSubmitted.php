@@ -20,6 +20,10 @@ class EnrollmentSubmitted extends Mailable
         $courseTitle = $this->enrollment->trainingSchedule->course->title ?? 'your course';
         $startDate = optional($this->enrollment->trainingSchedule->start_date)->format('F d, Y');
 
+        $emergencyContact = $this->enrollment->emergency_contact_name
+            ? "<li><strong>Emergency Contact:</strong> {$this->enrollment->emergency_contact_name} ({$this->enrollment->emergency_contact_relationship}) — {$this->enrollment->emergency_contact_mobile}</li>"
+            : '';
+
         return $this->subject("Enrollment Received - {$courseTitle}")
             ->html("
                 <h2>Hello {$studentName},</h2>
@@ -29,6 +33,7 @@ class EnrollmentSubmitted extends Mailable
                     <li><strong>Course:</strong> {$courseTitle}</li>
                     <li><strong>Schedule:</strong> {$startDate}</li>
                     <li><strong>Reference #:</strong> {$this->enrollment->id}</li>
+                    {$emergencyContact}
                 </ul>
                 <p>Our team will review your application and contact you at <strong>{$this->enrollment->student->email}</strong> within 1-2 business days.</p>
                 <p>You may also visit our office to complete payment and submit original documents.</p>

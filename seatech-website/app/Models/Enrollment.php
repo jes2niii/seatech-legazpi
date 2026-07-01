@@ -15,7 +15,9 @@ class Enrollment extends Model implements HasMedia
 
     protected $fillable = [
         'student_id', 'training_schedule_id', 'status',
-        'payment_status', 'requirements', 'notes', 'approved_by',
+        'payment_status', 'requirements',
+        'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_mobile',
+        'notes', 'approved_by',
     ];
 
     protected function casts(): array

@@ -24,20 +24,32 @@
                 </div>
                 <div>
                     <span class="text-xs text-gray-500 uppercase">Mobile</span>
-                    <p class="font-medium">{{ $student->mobile_number }}</p>
+                    <p class="font-medium">{{ $student->mobile_number ?? 'N/A' }}</p>
                 </div>
                 <div>
                     <span class="text-xs text-gray-500 uppercase">Gender</span>
-                    <p class="font-medium">{{ ucfirst($student->gender) }}</p>
+                    <p class="font-medium">{{ ucfirst($student->gender ?? 'N/A') }}</p>
+                </div>
+                <div>
+                    <span class="text-xs text-gray-500 uppercase">Civil Status</span>
+                    <p class="font-medium">{{ ucfirst($student->civil_status ?? 'N/A') }}</p>
                 </div>
                 <div>
                     <span class="text-xs text-gray-500 uppercase">Date of Birth</span>
                     <p class="font-medium">{{ $student->date_of_birth?->format('M d, Y') ?? 'N/A' }}</p>
                 </div>
+                <div>
+                    <span class="text-xs text-gray-500 uppercase">Place of Birth</span>
+                    <p class="font-medium">{{ $student->place_of_birth ?? 'N/A' }}</p>
+                </div>
 
                 <div class="col-span-2">
                     <span class="text-xs text-gray-500 uppercase">Address</span>
                     <p class="font-medium">{{ $student->address ?? 'N/A' }}</p>
+                </div>
+                <div class="col-span-2">
+                    <span class="text-xs text-gray-500 uppercase">Rank / Position</span>
+                    <p class="font-medium">{{ $student->rank ?? 'N/A' }}</p>
                 </div>
             </div>
         </div>

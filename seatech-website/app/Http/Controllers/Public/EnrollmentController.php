@@ -51,10 +51,33 @@ class EnrollmentController extends Controller
             'middle_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|in:male,female,other',
+            'civil_status' => 'nullable|in:single,married,widowed,separated',
             'address' => 'nullable|string',
-            'mobile_number' => 'nullable|string|max:20',
+            'place_of_birth' => 'nullable|string|max:255',
+            'mobile_number' => 'required|string|max:20',
             'email' => 'required|email',
             'seaman_book_number' => 'nullable|string|max:50',
+            'rank' => 'nullable|string|max:255',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            session(["enrollment.{$key}" => $value]);
+        }
+
+        return redirect()->route('enroll.step2_5');
+    }
+
+    public function step2_5()
+    {
+        return view('public.enroll.step2_5');
+    }
+
+    public function postStep2_5(Request $request)
+    {
+        $validated = $request->validate([
+            'emergency_contact_name' => 'required|string|max:255',
+            'emergency_contact_relationship' => 'required|in:Parent,Spouse,Sibling,Guardian,Friend,Other',
+            'emergency_contact_mobile' => 'required|string|max:20',
         ]);
 
         foreach ($validated as $key => $value) {
@@ -120,9 +143,12 @@ class EnrollmentController extends Controller
                 'middle_name' => $data['middle_name'] ?? null,
                 'date_of_birth' => $data['date_of_birth'] ?? null,
                 'gender' => $data['gender'] ?? null,
+                'civil_status' => $data['civil_status'] ?? null,
                 'address' => $data['address'] ?? null,
+                'place_of_birth' => $data['place_of_birth'] ?? null,
                 'mobile_number' => $data['mobile_number'] ?? null,
                 'seaman_book_number' => $data['seaman_book_number'] ?? null,
+                'rank' => $data['rank'] ?? null,
             ]
         );
 
@@ -132,6 +158,9 @@ class EnrollmentController extends Controller
             'status' => 'pending',
             'payment_status' => 'unpaid',
             'requirements' => $data['requirements'] ?? [],
+            'emergency_contact_name' => $data['emergency_contact_name'] ?? null,
+            'emergency_contact_relationship' => $data['emergency_contact_relationship'] ?? null,
+            'emergency_contact_mobile' => $data['emergency_contact_mobile'] ?? null,
         ]);
 
         $tempDocs = $data['temp_documents'] ?? [];

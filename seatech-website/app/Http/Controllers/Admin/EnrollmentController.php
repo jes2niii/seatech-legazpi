@@ -50,7 +50,9 @@ class EnrollmentController extends Controller
     {
         $enrollment->load(['student', 'trainingSchedule.course', 'approver']);
 
-        return view('admin.enrollments.show', compact('enrollment'));
+        $requirementLabels = config('enrollment.requirements', []);
+
+        return view('admin.enrollments.show', compact('enrollment', 'requirementLabels'));
     }
 
     public function approve(Enrollment $enrollment)

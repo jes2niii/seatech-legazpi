@@ -10,8 +10,8 @@ class Student extends Model
 {
     protected $fillable = [
         'user_id', 'first_name', 'last_name', 'middle_name',
-        'date_of_birth', 'gender', 'address', 'mobile_number',
-        'email', 'seaman_book_number',
+        'date_of_birth', 'gender', 'civil_status', 'address', 'place_of_birth',
+        'mobile_number', 'email', 'seaman_book_number', 'rank',
     ];
 
     protected function casts(): array
